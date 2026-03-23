@@ -1,0 +1,56 @@
+// ============================================================================
+// Dash Standard Library - IO Module
+// Author: htcdevk0
+// License: GNU GPL v3
+//
+// Formatted output and basic input utilities built over C stdio.
+// Supports variadic printing and typed input scanning.
+// ============================================================================
+
+extern: string __DASH_STDIO_VERSION;
+
+class io: static {
+
+    private const __SINP_STRING_BUFFER: uint->1024;
+
+    // =========================
+    // INTERNAL BUFFER HELPERS
+    // =========================
+
+    extern __append(buf: string, offset: int, fmt: string, v: ...): int;
+
+    extern __append_str(buf: string, offset: int, s: string): int;
+
+    extern __append_dyn(buf_ref: string, cap_ref: uint, offset: int, fmt: string, v: ...): void;
+
+    // =========================
+    // INTERNAL INPUT HELPERS
+    // =========================
+
+    extern __scan_value(fmt: string, v: ...): void;
+
+    extern __scan_bool(v: ...): void;
+
+    extern __scan_string(v: ...): void;
+
+    extern __scan_single(v: ...): void;
+
+    // =========================
+    // PRINT
+    // =========================
+
+    extern print(args: ...): void;
+
+    extern println(args: ...): void;
+
+    // For direct printf
+    extern dsprintf(type: string, args: ...): void;
+    
+    extern endln(): string;
+
+    // =========================
+    // INPUT (RAW SCANF STYLE)
+    // =========================
+
+    extern sinp(args: ...): void;
+}

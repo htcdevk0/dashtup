@@ -1,0 +1,955 @@
+extern("c") gtk_init(): void;
+extern("c") g_object_ref(object: uint): uint;
+extern("c") g_object_unref(object: uint): void;
+extern("c") g_signal_connect_data(instance: uint, detailed_signal: string, c_handler: uint, data: uint, destroy_data: uint, connect_flags: int): uint;
+extern("c") gtk_application_new(application_id: string, flags: int): uint;
+extern("c") g_application_run(application: uint, argc: int, argv: uint): int;
+extern("c") g_application_activate(application: uint): void;
+extern("c") g_application_quit(application: uint): void;
+extern("c") g_application_hold(application: uint): void;
+extern("c") g_application_release(application: uint): void;
+extern("c") gtk_application_window_new(application: uint): uint;
+extern("c") gtk_window_set_title(window: uint, title: string): void;
+extern("c") gtk_window_set_default_size(window: uint, width: int, height: int): void;
+extern("c") gtk_window_set_child(window: uint, child: uint): void;
+extern("c") gtk_window_present(window: uint): void;
+extern("c") gtk_window_close(window: uint): void;
+extern("c") gtk_window_fullscreen(window: uint): void;
+extern("c") gtk_window_unfullscreen(window: uint): void;
+extern("c") gtk_window_maximize(window: uint): void;
+extern("c") gtk_window_unmaximize(window: uint): void;
+extern("c") gtk_widget_add_css_class(widget: uint, class_name: string): void;
+extern("c") gtk_widget_remove_css_class(widget: uint, class_name: string): void;
+extern("c") gtk_window_minimize(window: uint): void;
+extern("c") gtk_widget_set_visible(widget: uint, visible: int): void;
+extern("c") gtk_widget_set_sensitive(widget: uint, sensitive: int): void;
+extern("c") gtk_widget_set_hexpand(widget: uint, expand: int): void;
+extern("c") gtk_widget_set_vexpand(widget: uint, expand: int): void;
+extern("c") gtk_widget_set_margin_top(widget: uint, margin: int): void;
+extern("c") gtk_widget_set_margin_bottom(widget: uint, margin: int): void;
+extern("c") gtk_widget_set_margin_start(widget: uint, margin: int): void;
+extern("c") gtk_widget_set_margin_end(widget: uint, margin: int): void;
+extern("c") gtk_widget_set_size_request(widget: uint, width: int, height: int): void;
+extern("c") gtk_widget_grab_focus(widget: uint): void;
+extern("c") gtk_box_new(orientation: int, spacing: int): uint;
+extern("c") gtk_box_append(box: uint, child: uint): void;
+extern("c") gtk_box_prepend(box: uint, child: uint): void;
+extern("c") gtk_box_remove(box: uint, child: uint): void;
+extern("c") gtk_button_new(): uint;
+extern("c") gtk_button_new_with_label(label: string): uint;
+extern("c") gtk_button_set_label(button: uint, label: string): void;
+extern("c") gtk_button_get_label(button: uint): string;
+extern("c") gtk_label_new(text: string): uint;
+extern("c") gtk_label_set_text(label: uint, text: string): void;
+extern("c") gtk_label_get_text(label: uint): string;
+extern("c") gtk_label_set_markup(label: uint, markup: string): void;
+extern("c") gtk_label_set_wrap(label: uint, wrap: int): void;
+extern("c") gtk_label_set_xalign(label: uint, xalign: double): void;
+extern("c") gtk_label_set_yalign(label: uint, yalign: double): void;
+extern("c") gtk_entry_new(): uint;
+extern("c") gtk_editable_set_text(editable: uint, text: string): void;
+extern("c") gtk_editable_get_text(editable: uint): string;
+extern("c") gtk_entry_set_placeholder_text(entry: uint, text: string): void;
+extern("c") gtk_entry_set_visibility(entry: uint, visible: int): void;
+extern("c") gtk_grid_new(): uint;
+extern("c") gtk_grid_attach(grid: uint, child: uint, column: int, row: int, width: int, height: int): void;
+extern("c") gtk_grid_set_row_spacing(grid: uint, spacing: int): void;
+extern("c") gtk_grid_set_column_spacing(grid: uint, spacing: int): void;
+extern("c") gtk_grid_set_row_homogeneous(grid: uint, homogeneous: int): void;
+extern("c") gtk_grid_set_column_homogeneous(grid: uint, homogeneous: int): void;
+extern("c") gtk_scrolled_window_new(): uint;
+extern("c") gtk_scrolled_window_set_child(scrolled: uint, child: uint): void;
+extern("c") gtk_scrolled_window_set_min_content_width(scrolled: uint, width: int): void;
+extern("c") gtk_scrolled_window_set_min_content_height(scrolled: uint, height: int): void;
+extern("c") gtk_scrolled_window_set_max_content_width(scrolled: uint, width: int): void;
+extern("c") gtk_scrolled_window_set_max_content_height(scrolled: uint, height: int): void;
+extern("c") gtk_text_view_new(): uint;
+extern("c") gtk_text_view_get_buffer(view: uint): uint;
+extern("c") gtk_text_view_set_editable(view: uint, editable: int): void;
+extern("c") gtk_text_view_set_monospace(view: uint, monospace: int): void;
+extern("c") gtk_text_buffer_set_text(buffer: uint, text: string, length: int): void;
+extern("c") gtk_check_button_new(): uint;
+extern("c") gtk_check_button_new_with_label(label: string): uint;
+extern("c") gtk_check_button_set_active(button: uint, active: int): void;
+extern("c") gtk_check_button_get_active(button: uint): int;
+extern("c") gtk_switch_new(): uint;
+extern("c") gtk_switch_set_active(sw: uint, active: int): void;
+extern("c") gtk_switch_get_active(sw: uint): int;
+extern("c") gtk_separator_new(orientation: int): uint;
+extern("c") gtk_frame_new(label: string): uint;
+extern("c") gtk_frame_set_child(frame: uint, child: uint): void;
+extern("c") gtk_frame_set_label(frame: uint, label: string): void;
+extern("c") gtk_progress_bar_new(): uint;
+extern("c") gtk_progress_bar_set_fraction(bar: uint, fraction: double): void;
+extern("c") gtk_progress_bar_pulse(bar: uint): void;
+extern("c") gtk_progress_bar_set_text(bar: uint, text: string): void;
+extern("c") gtk_progress_bar_set_show_text(bar: uint, show_text: int): void;
+extern("c") gtk_spinner_new(): uint;
+extern("c") gtk_spinner_start(spinner: uint): void;
+extern("c") gtk_spinner_stop(spinner: uint): void;
+extern("c") gtk_picture_new_for_filename(filename: string): uint;
+extern("c") gtk_picture_set_filename(picture: uint, filename: string): void;
+extern("c") gtk_picture_set_can_shrink(picture: uint, can_shrink: int): void;
+extern("c") gtk_picture_set_keep_aspect_ratio(picture: uint, keep_aspect_ratio: int): void;
+extern("c") gtk_image_new_from_file(filename: string): uint;
+extern("c") gtk_image_set_from_file(image: uint, filename: string): void;
+extern("c") gtk_header_bar_new(): uint;
+extern("c") gtk_header_bar_pack_start(bar: uint, child: uint): void;
+extern("c") gtk_header_bar_pack_end(bar: uint, child: uint): void;
+extern("c") gtk_header_bar_set_title_widget(bar: uint, title_widget: uint): void;
+extern("c") gtk_list_box_new(): uint;
+extern("c") gtk_list_box_append(listbox: uint, child: uint): void;
+extern("c") gtk_list_box_remove(listbox: uint, child: uint): void;
+extern("c") gtk_list_box_row_new(): uint;
+extern("c") gtk_list_box_row_set_child(row: uint, child: uint): void;
+extern("c") gtk_stack_new(): uint;
+extern("c") gtk_stack_add_titled(stack: uint, child: uint, name: string, title: string): void;
+extern("c") gtk_stack_set_visible_child_name(stack: uint, name: string): void;
+extern("c") gtk_stack_switcher_new(): uint;
+extern("c") gtk_stack_switcher_set_stack(switcher: uint, stack: uint): void;
+extern("c") gtk_overlay_new(): uint;
+extern("c") gtk_overlay_set_child(overlay: uint, child: uint): void;
+extern("c") gtk_overlay_add_overlay(overlay: uint, widget: uint): void;
+extern("c") gtk_revealer_new(): uint;
+extern("c") gtk_revealer_set_child(revealer: uint, child: uint): void;
+extern("c") gtk_revealer_set_reveal_child(revealer: uint, reveal: int): void;
+extern("c") gtk_link_button_new(uri: string): uint;
+extern("c") gtk_link_button_set_uri(button: uint, uri: string): void;
+extern("c") gtk_link_button_get_uri(button: uint): string;
+extern("c") gtk_center_box_new(): uint;
+extern("c") gtk_center_box_set_start_widget(box: uint, child: uint): void;
+extern("c") gtk_center_box_set_center_widget(box: uint, child: uint): void;
+extern("c") gtk_center_box_set_end_widget(box: uint, child: uint): void;
+extern("c") gtk_paned_new(orientation: int): uint;
+extern("c") gtk_paned_set_start_child(paned: uint, child: uint): void;
+extern("c") gtk_paned_set_end_child(paned: uint, child: uint): void;
+extern("c") gtk_paned_set_position(paned: uint, position: int): void;
+extern("c") gtk_drawing_area_new(): uint;
+extern("c") gtk_drawing_area_set_content_width(area: uint, width: int): void;
+extern("c") gtk_drawing_area_set_content_height(area: uint, height: int): void;
+
+const GTK_ORIENTATION_HORIZONTAL: int = 0;
+const GTK_ORIENTATION_VERTICAL: int = 1;
+const G_APPLICATION_DEFAULT_FLAGS: int = 0;
+const G_CONNECT_AFTER: int = 1;
+
+class gtk: static {
+    fn init(): void {
+        gtk_init();
+    }
+
+    fn retain(raw: uint): uint {
+        return g_object_ref(raw);
+    }
+
+    fn release(raw: uint): void {
+        g_object_unref(raw);
+    }
+}
+
+class gtk_signal: static {
+    fn connect(instance: uint, signal_name: string, callback: uint, data: uint): uint {
+        return g_signal_connect_data(instance, signal_name, callback, data, 0, 0);
+    }
+
+    fn connect_after(instance: uint, signal_name: string, callback: uint, data: uint): uint {
+        return g_signal_connect_data(instance, signal_name, callback, data, 0, G_CONNECT_AFTER);
+    }
+}
+
+class gtk_app {
+    let raw: uint;
+
+    fn init(application_id: string): void {
+        self.raw = gtk_application_new(application_id, G_APPLICATION_DEFAULT_FLAGS);
+    }
+
+    fn from_raw(value: uint): void {
+        self.raw = value;
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn run(): int {
+        return g_application_run(self.raw, 0, 0);
+    }
+
+    fn activate(): void {
+        g_application_activate(self.raw);
+    }
+
+    fn quit(): void {
+        g_application_quit(self.raw);
+    }
+
+    fn hold(): void {
+        g_application_hold(self.raw);
+    }
+
+    fn release(): void {
+        g_application_release(self.raw);
+    }
+
+    fn on_activate(callback: uint, data: uint): uint {
+        return gtk_signal.connect(self.raw, "activate", callback, data);
+    }
+}
+
+class gtk_widget {
+    let raw: uint;
+
+    fn from_raw(value: uint): void {
+        self.raw = value;
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn show(): void {
+        gtk_widget_set_visible(self.raw, 1);
+    }
+
+    fn hide(): void {
+        gtk_widget_set_visible(self.raw, 0);
+    }
+
+    fn set_visible(visible: bool): void {
+        if (visible) {
+            gtk_widget_set_visible(self.raw, 1);
+        } else {
+            gtk_widget_set_visible(self.raw, 0);
+        }
+    }
+
+    fn set_sensitive(enabled: bool): void {
+        if (enabled) {
+            gtk_widget_set_sensitive(self.raw, 1);
+        } else {
+            gtk_widget_set_sensitive(self.raw, 0);
+        }
+    }
+
+    fn set_hexpand(enabled: bool): void {
+        if (enabled) {
+            gtk_widget_set_hexpand(self.raw, 1);
+        } else {
+            gtk_widget_set_hexpand(self.raw, 0);
+        }
+    }
+
+    fn set_vexpand(enabled: bool): void {
+        if (enabled) {
+            gtk_widget_set_vexpand(self.raw, 1);
+        } else {
+            gtk_widget_set_vexpand(self.raw, 0);
+        }
+    }
+
+    fn set_margin(top: int, bottom: int, start: int, end: int): void {
+        gtk_widget_set_margin_top(self.raw, top);
+        gtk_widget_set_margin_bottom(self.raw, bottom);
+        gtk_widget_set_margin_start(self.raw, start);
+        gtk_widget_set_margin_end(self.raw, end);
+    }
+
+    fn set_size(width: int, height: int): void {
+        gtk_widget_set_size_request(self.raw, width, height);
+    }
+
+    fn focus(): void {
+        gtk_widget_grab_focus(self.raw);
+    }
+
+    fn add_css(class_name: string): void {
+        gtk_widget_add_css_class(self.raw, class_name);
+    }
+
+    fn remove_css(class_name: string): void {
+        gtk_widget_remove_css_class(self.raw, class_name);
+    }
+}
+
+class gtk_window {
+    let raw: uint;
+
+    fn init(app: gtk_app): void {
+        self.raw = gtk_application_window_new(app.raw);
+    }
+
+    fn from_raw(value: uint): void {
+        self.raw = value;
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_title(title: string): void {
+        gtk_window_set_title(self.raw, title);
+    }
+
+    fn set_default_size(width: int, height: int): void {
+        gtk_window_set_default_size(self.raw, width, height);
+    }
+
+    fn set_child(child: uint): void {
+        gtk_window_set_child(self.raw, child);
+    }
+
+    fn present(): void {
+        gtk_window_present(self.raw);
+    }
+
+    fn close(): void {
+        gtk_window_close(self.raw);
+    }
+
+    fn fullscreen(): void {
+        gtk_window_fullscreen(self.raw);
+    }
+
+    fn unfullscreen(): void {
+        gtk_window_unfullscreen(self.raw);
+    }
+
+    fn maximize(): void {
+        gtk_window_maximize(self.raw);
+    }
+
+    fn unmaximize(): void {
+        gtk_window_unmaximize(self.raw);
+    }
+
+    fn minimize(): void {
+        gtk_window_minimize(self.raw);
+    }
+}
+
+class gtk_box_widget {
+    let raw: uint;
+
+    fn init(orientation: int, spacing: int): void {
+        self.raw = gtk_box_new(orientation, spacing);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn append(child: uint): void {
+        gtk_box_append(self.raw, child);
+    }
+
+    fn prepend(child: uint): void {
+        gtk_box_prepend(self.raw, child);
+    }
+
+    fn remove(child: uint): void {
+        gtk_box_remove(self.raw, child);
+    }
+}
+
+class gtk_button_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_button_new();
+    }
+
+    fn init_with_label(label: string): void {
+        self.raw = gtk_button_new_with_label(label);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_label(label: string): void {
+        gtk_button_set_label(self.raw, label);
+    }
+
+    fn label(): string {
+        return gtk_button_get_label(self.raw);
+    }
+
+    fn on_clicked(callback: uint, data: uint): uint {
+        return gtk_signal.connect(self.raw, "clicked", callback, data);
+    }
+}
+
+class gtk_label_widget {
+    let raw: uint;
+
+    fn init(text: string): void {
+        self.raw = gtk_label_new(text);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_text(text: string): void {
+        gtk_label_set_text(self.raw, text);
+    }
+
+    fn text(): string {
+        return gtk_label_get_text(self.raw);
+    }
+
+    fn set_markup(markup: string): void {
+        gtk_label_set_markup(self.raw, markup);
+    }
+
+    fn set_wrap(enabled: bool): void {
+        if (enabled) {
+            gtk_label_set_wrap(self.raw, 1);
+        } else {
+            gtk_label_set_wrap(self.raw, 0);
+        }
+    }
+
+    fn set_align(xalign: double, yalign: double): void {
+        gtk_label_set_xalign(self.raw, xalign);
+        gtk_label_set_yalign(self.raw, yalign);
+    }
+}
+
+class gtk_entry_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_entry_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_text(text: string): void {
+        gtk_editable_set_text(self.raw, text);
+    }
+
+    fn text(): string {
+        return gtk_editable_get_text(self.raw);
+    }
+
+    fn set_placeholder(text: string): void {
+        gtk_entry_set_placeholder_text(self.raw, text);
+    }
+
+    fn set_visibility(visible: bool): void {
+        if (visible) {
+            gtk_entry_set_visibility(self.raw, 1);
+        } else {
+            gtk_entry_set_visibility(self.raw, 0);
+        }
+    }
+}
+
+class gtk_grid_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_grid_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn attach(child: uint, column: int, row: int, width: int, height: int): void {
+        gtk_grid_attach(self.raw, child, column, row, width, height);
+    }
+
+    fn set_spacing(row_spacing: int, column_spacing: int): void {
+        gtk_grid_set_row_spacing(self.raw, row_spacing);
+        gtk_grid_set_column_spacing(self.raw, column_spacing);
+    }
+
+    fn set_homogeneous(rows: bool, columns: bool): void {
+        if (rows) {
+            gtk_grid_set_row_homogeneous(self.raw, 1);
+        } else {
+            gtk_grid_set_row_homogeneous(self.raw, 0);
+        }
+        if (columns) {
+            gtk_grid_set_column_homogeneous(self.raw, 1);
+        } else {
+            gtk_grid_set_column_homogeneous(self.raw, 0);
+        }
+    }
+}
+
+class gtk_scrolled_window_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_scrolled_window_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_child(child: uint): void {
+        gtk_scrolled_window_set_child(self.raw, child);
+    }
+
+    fn set_min_content_size(width: int, height: int): void {
+        gtk_scrolled_window_set_min_content_width(self.raw, width);
+        gtk_scrolled_window_set_min_content_height(self.raw, height);
+    }
+
+    fn set_max_content_size(width: int, height: int): void {
+        gtk_scrolled_window_set_max_content_width(self.raw, width);
+        gtk_scrolled_window_set_max_content_height(self.raw, height);
+    }
+}
+
+class gtk_text_view_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_text_view_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn buffer(): uint {
+        return gtk_text_view_get_buffer(self.raw);
+    }
+
+    fn set_text(text: string): void {
+        gtk_text_buffer_set_text(self.buffer(), text, -1);
+    }
+
+    fn set_editable(editable: bool): void {
+        if (editable) {
+            gtk_text_view_set_editable(self.raw, 1);
+        } else {
+            gtk_text_view_set_editable(self.raw, 0);
+        }
+    }
+
+    fn set_monospace(enabled: bool): void {
+        if (enabled) {
+            gtk_text_view_set_monospace(self.raw, 1);
+        } else {
+            gtk_text_view_set_monospace(self.raw, 0);
+        }
+    }
+}
+
+class gtk_check_button_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_check_button_new();
+    }
+
+    fn init_with_label(label: string): void {
+        self.raw = gtk_check_button_new_with_label(label);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_active(active: bool): void {
+        if (active) {
+            gtk_check_button_set_active(self.raw, 1);
+        } else {
+            gtk_check_button_set_active(self.raw, 0);
+        }
+    }
+
+    fn active(): bool {
+        return gtk_check_button_get_active(self.raw) != 0;
+    }
+}
+
+class gtk_switch_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_switch_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_active(active: bool): void {
+        if (active) {
+            gtk_switch_set_active(self.raw, 1);
+        } else {
+            gtk_switch_set_active(self.raw, 0);
+        }
+    }
+
+    fn active(): bool {
+        return gtk_switch_get_active(self.raw) != 0;
+    }
+}
+
+class gtk_separator_widget {
+    let raw: uint;
+
+    fn init(orientation: int): void {
+        self.raw = gtk_separator_new(orientation);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+}
+
+class gtk_frame_widget {
+    let raw: uint;
+
+    fn init(label: string): void {
+        self.raw = gtk_frame_new(label);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_child(child: uint): void {
+        gtk_frame_set_child(self.raw, child);
+    }
+
+    fn set_label(label: string): void {
+        gtk_frame_set_label(self.raw, label);
+    }
+}
+
+class gtk_progress_bar_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_progress_bar_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_fraction(fraction: double): void {
+        gtk_progress_bar_set_fraction(self.raw, fraction);
+    }
+
+    fn pulse(): void {
+        gtk_progress_bar_pulse(self.raw);
+    }
+
+    fn set_text(text: string): void {
+        gtk_progress_bar_set_text(self.raw, text);
+    }
+
+    fn set_show_text(enabled: bool): void {
+        if (enabled) {
+            gtk_progress_bar_set_show_text(self.raw, 1);
+        } else {
+            gtk_progress_bar_set_show_text(self.raw, 0);
+        }
+    }
+}
+
+class gtk_spinner_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_spinner_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn start(): void {
+        gtk_spinner_start(self.raw);
+    }
+
+    fn stop(): void {
+        gtk_spinner_stop(self.raw);
+    }
+}
+
+class gtk_picture_widget {
+    let raw: uint;
+
+    fn init(filename: string): void {
+        self.raw = gtk_picture_new_for_filename(filename);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_filename(filename: string): void {
+        gtk_picture_set_filename(self.raw, filename);
+    }
+
+    fn set_can_shrink(enabled: bool): void {
+        if (enabled) {
+            gtk_picture_set_can_shrink(self.raw, 1);
+        } else {
+            gtk_picture_set_can_shrink(self.raw, 0);
+        }
+    }
+
+    fn set_keep_aspect_ratio(enabled: bool): void {
+        if (enabled) {
+            gtk_picture_set_keep_aspect_ratio(self.raw, 1);
+        } else {
+            gtk_picture_set_keep_aspect_ratio(self.raw, 0);
+        }
+    }
+}
+
+class gtk_image_widget {
+    let raw: uint;
+
+    fn init(filename: string): void {
+        self.raw = gtk_image_new_from_file(filename);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_from_file(filename: string): void {
+        gtk_image_set_from_file(self.raw, filename);
+    }
+}
+
+class gtk_header_bar_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_header_bar_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn pack_start(child: uint): void {
+        gtk_header_bar_pack_start(self.raw, child);
+    }
+
+    fn pack_end(child: uint): void {
+        gtk_header_bar_pack_end(self.raw, child);
+    }
+
+    fn set_title_widget(child: uint): void {
+        gtk_header_bar_set_title_widget(self.raw, child);
+    }
+}
+
+class gtk_list_box_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_list_box_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn append(child: uint): void {
+        gtk_list_box_append(self.raw, child);
+    }
+
+    fn remove(child: uint): void {
+        gtk_list_box_remove(self.raw, child);
+    }
+}
+
+class gtk_list_box_row_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_list_box_row_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_child(child: uint): void {
+        gtk_list_box_row_set_child(self.raw, child);
+    }
+}
+
+class gtk_stack_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_stack_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn add_titled(child: uint, name: string, title: string): void {
+        gtk_stack_add_titled(self.raw, child, name, title);
+    }
+
+    fn set_visible_child_name(name: string): void {
+        gtk_stack_set_visible_child_name(self.raw, name);
+    }
+}
+
+class gtk_stack_switcher_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_stack_switcher_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_stack(stack: gtk_stack_widget): void {
+        gtk_stack_switcher_set_stack(self.raw, stack.raw);
+    }
+}
+
+class gtk_overlay_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_overlay_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_child(child: uint): void {
+        gtk_overlay_set_child(self.raw, child);
+    }
+
+    fn add_overlay(child: uint): void {
+        gtk_overlay_add_overlay(self.raw, child);
+    }
+}
+
+class gtk_revealer_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_revealer_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_child(child: uint): void {
+        gtk_revealer_set_child(self.raw, child);
+    }
+
+    fn set_reveal_child(reveal: bool): void {
+        if (reveal) {
+            gtk_revealer_set_reveal_child(self.raw, 1);
+        } else {
+            gtk_revealer_set_reveal_child(self.raw, 0);
+        }
+    }
+}
+
+class gtk_link_button_widget {
+    let raw: uint;
+
+    fn init(uri: string): void {
+        self.raw = gtk_link_button_new(uri);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_uri(uri: string): void {
+        gtk_link_button_set_uri(self.raw, uri);
+    }
+
+    fn uri(): string {
+        return gtk_link_button_get_uri(self.raw);
+    }
+}
+
+class gtk_center_box_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_center_box_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_start(child: uint): void {
+        gtk_center_box_set_start_widget(self.raw, child);
+    }
+
+    fn set_center(child: uint): void {
+        gtk_center_box_set_center_widget(self.raw, child);
+    }
+
+    fn set_end(child: uint): void {
+        gtk_center_box_set_end_widget(self.raw, child);
+    }
+}
+
+class gtk_paned_widget {
+    let raw: uint;
+
+    fn init(orientation: int): void {
+        self.raw = gtk_paned_new(orientation);
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_start_child(child: uint): void {
+        gtk_paned_set_start_child(self.raw, child);
+    }
+
+    fn set_end_child(child: uint): void {
+        gtk_paned_set_end_child(self.raw, child);
+    }
+
+    fn set_position(position: int): void {
+        gtk_paned_set_position(self.raw, position);
+    }
+}
+
+class gtk_drawing_area_widget {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_drawing_area_new();
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn set_content_size(width: int, height: int): void {
+        gtk_drawing_area_set_content_width(self.raw, width);
+        gtk_drawing_area_set_content_height(self.raw, height);
+    }
+}

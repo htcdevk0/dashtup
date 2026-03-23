@@ -1,0 +1,211 @@
+import [gtk/gtk4/gtk];
+
+// =========================
+// GTK4 CSS / STYLE PROVIDER
+// =========================
+// This file is meant to work together with gtk/gtk4/gtk.ds.
+// It focuses on GTK4 CSS provider APIs and CSS-class helpers.
+
+extern("c") gdk_display_get_default(): uint;
+
+extern("c") gtk_css_provider_new(): uint;
+extern("c") gtk_css_provider_load_from_bytes(provider: uint, data: uint): void;
+extern("c") gtk_css_provider_load_from_data(provider: uint, data: string, length: int): void;
+extern("c") gtk_css_provider_load_from_file(provider: uint, file: uint): void;
+extern("c") gtk_css_provider_load_from_path(provider: uint, path: string): void;
+extern("c") gtk_css_provider_load_from_resource(provider: uint, resource_path: string): void;
+extern("c") gtk_css_provider_load_from_string(provider: uint, data: string): void;
+extern("c") gtk_css_provider_load_named(provider: uint, name: string, variant: string): void;
+extern("c") gtk_css_provider_to_string(provider: uint): string;
+
+extern("c") gtk_style_context_add_provider_for_display(display: uint, provider: uint, priority: uint): void;
+extern("c") gtk_style_context_remove_provider_for_display(display: uint, provider: uint): void;
+
+extern("c") gtk_widget_has_css_class(widget: uint, class_name: string): int;
+extern("c") gtk_widget_get_css_name(widget: uint): string;
+
+const GTK_STYLE_PROVIDER_PRIORITY_FALLBACK: uint = 1;
+const GTK_STYLE_PROVIDER_PRIORITY_THEME: uint = 200;
+const GTK_STYLE_PROVIDER_PRIORITY_SETTINGS: uint = 400;
+const GTK_STYLE_PROVIDER_PRIORITY_APPLICATION: uint = 600;
+const GTK_STYLE_PROVIDER_PRIORITY_USER: uint = 800;
+
+class gcss_display: static {
+    fn def(): uint {
+        return gdk_display_get_default();
+    }
+
+    fn add_provider(display: uint, provider: uint, priority: uint): void {
+        gtk_style_context_add_provider_for_display(display, provider, priority);
+    }
+
+    fn remove_provider(display: uint, provider: uint): void {
+        gtk_style_context_remove_provider_for_display(display, provider);
+    }
+}
+
+class gcss_provider {
+    let raw: uint;
+
+    fn init(): void {
+        self.raw = gtk_css_provider_new();
+    }
+
+    fn from_raw(value: uint): void {
+        self.raw = value;
+    }
+
+    fn ptr(): uint {
+        return self.raw;
+    }
+
+    fn retain(): void {
+        self.raw = gtk.retain(self.raw);
+    }
+
+    fn release(): void {
+        gtk.release(self.raw);
+    }
+
+    // GTK4 current / preferred loaders
+    fn load_string(css: string): void {
+        gtk_css_provider_load_from_string(self.raw, css);
+    }
+
+    fn load_path(path: string): void {
+        gtk_css_provider_load_from_path(self.raw, path);
+    }
+
+    fn load_resource(resource_path: string): void {
+        gtk_css_provider_load_from_resource(self.raw, resource_path);
+    }
+
+    // Raw / extended loaders for future gio/gbytes integrations
+    fn load_bytes(bytes: uint): void {
+        gtk_css_provider_load_from_bytes(self.raw, bytes);
+    }
+
+    fn load_file(file: uint): void {
+        gtk_css_provider_load_from_file(self.raw, file);
+    }
+
+    // Compatibility loaders
+    fn load_data(css: string): void {
+        gtk_css_provider_load_from_data(self.raw, css, -1);
+    }
+
+    fn load_named(theme_name: string, variant: string): void {
+        gtk_css_provider_load_named(self.raw, theme_name, variant);
+    }
+
+    fn to_css(): string {
+        return gtk_css_provider_to_string(self.raw);
+    }
+
+    fn apply_to_display(display: uint, priority: uint): void {
+        gtk_style_context_add_provider_for_display(display, self.raw, priority);
+    }
+
+    fn apply_default(priority: uint): void {
+        let display: uint = gcss_display.def();
+        gtk_style_context_add_provider_for_display(display, self.raw, priority);
+    }
+
+    fn remove_from_display(display: uint): void {
+        gtk_style_context_remove_provider_for_display(display, self.raw);
+    }
+
+    fn remove_default(): void {
+        let display: uint = gcss_display.def();
+        gtk_style_context_remove_provider_for_display(display, self.raw);
+    }
+
+    fn on_parsing_error(callback: uint, data: uint): uint {
+        return gtk_signal.connect(self.raw, "parsing-error", callback, data);
+    }
+}
+
+class gcss_widget: static {
+    fn add_class(widget: uint, class_name: string): void {
+        gtk_widget_add_css_class(widget, class_name);
+    }
+
+    fn remove_class(widget: uint, class_name: string): void {
+        gtk_widget_remove_css_class(widget, class_name);
+    }
+
+    fn has_class(widget: uint, class_name: string): bool {
+        return gtk_widget_has_css_class(widget, class_name) != 0;
+    }
+
+    fn css_name(widget: uint): string {
+        return gtk_widget_get_css_name(widget);
+    }
+}
+
+class gcss: static {
+    fn provider(): uint {
+        return gtk_css_provider_new();
+    }
+
+    fn apply_string(css: string, priority: uint): uint {
+        let provider: uint = gtk_css_provider_new();
+        gtk_css_provider_load_from_string(provider, css);
+        let display: uint = gcss_display.def();
+        gtk_style_context_add_provider_for_display(display, provider, priority);
+        return provider;
+    }
+
+    fn apply_data(css: string, priority: uint): uint {
+        let provider: uint = gtk_css_provider_new();
+        gtk_css_provider_load_from_data(provider, css, -1);
+        let display: uint = gcss_display.def();
+        gtk_style_context_add_provider_for_display(display, provider, priority);
+        return provider;
+    }
+
+    fn apply_path(path: string, priority: uint): uint {
+        let provider: uint = gtk_css_provider_new();
+        gtk_css_provider_load_from_path(provider, path);
+        let display: uint = gcss_display.def();
+        gtk_style_context_add_provider_for_display(display, provider, priority);
+        return provider;
+    }
+
+    fn apply_resource(resource_path: string, priority: uint): uint {
+        let provider: uint = gtk_css_provider_new();
+        gtk_css_provider_load_from_resource(provider, resource_path);
+        let display: uint = gcss_display.def();
+        gtk_style_context_add_provider_for_display(display, provider, priority);
+        return provider;
+    }
+
+    fn apply_named(theme_name: string, variant: string, priority: uint): uint {
+        let provider: uint = gtk_css_provider_new();
+        gtk_css_provider_load_named(provider, theme_name, variant);
+        let display: uint = gcss_display.def();
+        gtk_style_context_add_provider_for_display(display, provider, priority);
+        return provider;
+    }
+
+    fn remove(provider: uint): void {
+        let display: uint = gcss_display.def();
+        gtk_style_context_remove_provider_for_display(display, provider);
+    }
+
+    fn add_class(widget: uint, class_name: string): void {
+        gtk_widget_add_css_class(widget, class_name);
+    }
+
+    fn remove_class(widget: uint, class_name: string): void {
+        gtk_widget_remove_css_class(widget, class_name);
+    }
+
+    fn has_class(widget: uint, class_name: string): bool {
+        return gtk_widget_has_css_class(widget, class_name) != 0;
+    }
+
+    fn css_name(widget: uint): string {
+        return gtk_widget_get_css_name(widget);
+    }
+}

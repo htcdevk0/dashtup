@@ -1,0 +1,296 @@
+private extern("c") socket(domain: int, type_: int, protocol: int): int;
+private extern("c") bind(fd: int, addr: sockaddr_in_raw*, addrlen: int): int;
+private extern("c") listen(fd: int, backlog: int): int;
+private extern("c") accept(fd: int, addr: int, addrlen: int): int;
+private extern("c") recv(fd: int, buffer: string, length: uint, flags: int): int;
+private extern("c") send(fd: int, buffer: string, length: uint, flags: int): int;
+private extern("c") shutdown(fd: int, how: int): int;
+private extern("c") close(fd: int): int;
+private extern("c") setsockopt(fd: int, level: int, optname: int, optval: int*, optlen: int): int;
+private extern("c") malloc(size: uint): string;
+private extern("c") free(ptr: string): void;
+private extern("c") memset(ptr: string, value: int, size: uint): string;
+private extern("c") strlen(text: string): uint;
+private extern("c") strstr(haystack: string, needle: string): string;
+private extern("c") dprintf(fd: int, format: string, args: ...): int;
+
+/*
+   POSIX/Linux HTTP server helpers for Dash.
+   This file uses only C FFI + features already present in the language.
+
+   Import with:
+       import [http/server];
+
+   Example:
+       import [http/server];
+
+       fn main(): int {
+           let fd: int = http_server.open(8080, HTTP_DEFAULT_BACKLOG);
+           if (fd < 0) {
+               return 1;
+           }
+
+           let client: int = http_server.accept(fd);
+           if (client >= 0) {
+               http_server.reply_text(client, 200, "OK", "text/plain; charset=utf-8", "Hello from Dash HTTP\n");
+               http_server.close_client(client);
+           }
+
+           http_server.close_server(fd);
+           return 0;
+       }
+*/
+
+group sockaddr_in_raw {
+    first: uint,
+    second: uint
+}
+
+const AF_INET: int = 2;
+const SOCK_STREAM: int = 1;
+const SOL_SOCKET: int = 1;
+const SO_REUSEADDR: int = 2;
+const SHUT_RD: int = 0;
+const SHUT_WR: int = 1;
+const SHUT_RDWR: int = 2;
+const HTTP_DEFAULT_BACKLOG: int = 128;
+const SOCKADDR_IN_SIZE: int = 16;
+const HTTP_PORT: int = 80;
+const HTTPS_PORT: int = 443;
+const DEV_HTTP_PORT: int = 8080;
+const ALT_HTTP_PORT: int = 8000;
+
+class http_server: static {
+    fn htons(port: int): uint {
+        let hi: int = port / 256;
+        let lo: int = port - (hi * 256);
+        let swapped: int = (lo * 256) + hi;
+        return swapped;
+    }
+
+    fn sockaddr_any_first_word(port: int): uint {
+        let net_port: uint = self.htons(port);
+        return AF_INET + (net_port * 65536);
+    }
+
+    fn set_reuseaddr(fd: int): int {
+        let enabled: int = 1;
+        return setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &enabled, 4);
+    }
+
+    fn open_socket(): int {
+        return socket(AF_INET, SOCK_STREAM, 0);
+    }
+
+    fn bind_any(fd: int, port: int): int {
+        let addr: sockaddr_in_raw = { self.sockaddr_any_first_word(port), 0 };
+        return bind(fd, &addr, SOCKADDR_IN_SIZE);
+    }
+
+    fn start(fd: int, backlog: int): int {
+        return listen(fd, backlog);
+    }
+
+    fn open(port: int, backlog: int): int {
+        let fd: int = self.open_socket();
+        if (fd < 0) {
+            return fd;
+        }
+
+        self.set_reuseaddr(fd);
+
+        if (self.bind_any(fd, port) != 0) {
+            close(fd);
+            return -1;
+        }
+
+        if (self.start(fd, backlog) != 0) {
+            close(fd);
+            return -1;
+        }
+
+        return fd;
+    }
+
+    fn open_default(port: int): int {
+        return self.open(port, HTTP_DEFAULT_BACKLOG);
+    }
+
+    fn accept(server_fd: int): int {
+        return accept(server_fd, 0, 0);
+    }
+
+    fn shutdown_read(fd: int): int {
+        return shutdown(fd, SHUT_RD);
+    }
+
+    fn shutdown_write(fd: int): int {
+        return shutdown(fd, SHUT_WR);
+    }
+
+    fn shutdown_both(fd: int): int {
+        return shutdown(fd, SHUT_RDWR);
+    }
+
+    fn close_server(fd: int): int {
+        return close(fd);
+    }
+
+    fn close_client(fd: int): int {
+        return close(fd);
+    }
+
+    fn alloc_buffer(size: uint): string {
+        let buffer: string = malloc(size + 1);
+        memset(buffer, 0, size + 1);
+        return buffer;
+    }
+
+    fn free_buffer(buffer: string): void {
+        free(buffer);
+    }
+
+    fn recv_into(fd: int, buffer: string, size: uint): int {
+        return recv(fd, buffer, size, 0);
+    }
+
+    fn read_text(fd: int, size: uint): string {
+        let buffer: string = self.alloc_buffer(size);
+        recv(fd, buffer, size, 0);
+        return buffer;
+    }
+
+    fn send_bytes(fd: int, buffer: string, size: uint): int {
+        return send(fd, buffer, size, 0);
+    }
+
+    fn send_text(fd: int, text: string): int {
+        return send(fd, text, strlen(text), 0);
+    }
+
+    fn contains(text: string, needle: string): bool {
+        return strstr(text, needle) != 0;
+    }
+
+    fn is_get(request: string): bool {
+        return self.contains(request, "GET ");
+    }
+
+    fn is_post(request: string): bool {
+        return self.contains(request, "POST ");
+    }
+
+    fn is_put(request: string): bool {
+        return self.contains(request, "PUT ");
+    }
+
+    fn is_delete(request: string): bool {
+        return self.contains(request, "DELETE ");
+    }
+
+    fn is_head(request: string): bool {
+        return self.contains(request, "HEAD ");
+    }
+
+    fn has_header(request: string, header: string): bool {
+        return self.contains(request, header);
+    }
+
+    fn reply(fd: int, status: int, reason: string, content_type: string, body: string): int {
+        return dprintf(
+            fd,
+            "HTTP/1.1 %lld %s\r\nContent-Type: %s\r\nContent-Length: %llu\r\nConnection: close\r\nServer: Dash\r\n\r\n%s",
+            status,
+            reason,
+            content_type,
+            strlen(body),
+            body
+        );
+    }
+
+    fn reply_text(fd: int, status: int, reason: string, content_type: string, body: string): int {
+        return self.reply(fd, status, reason, content_type, body);
+    }
+
+    fn ok(fd: int, body: string): int {
+        return self.reply(fd, 200, "OK", "text/plain; charset=utf-8", body);
+    }
+
+    fn html(fd: int, body: string): int {
+        return self.reply(fd, 200, "OK", "text/html; charset=utf-8", body);
+    }
+
+    fn json(fd: int, body: string): int {
+        return self.reply(fd, 200, "OK", "application/json", body);
+    }
+
+    fn not_found(fd: int, body: string): int {
+        return self.reply(fd, 404, "Not Found", "text/plain; charset=utf-8", body);
+    }
+
+    fn bad_request(fd: int, body: string): int {
+        return self.reply(fd, 400, "Bad Request", "text/plain; charset=utf-8", body);
+    }
+
+    fn internal_error(fd: int, body: string): int {
+        return self.reply(fd, 500, "Internal Server Error", "text/plain; charset=utf-8", body);
+    }
+
+    fn method_not_allowed(fd: int, body: string): int {
+        return self.reply(fd, 405, "Method Not Allowed", "text/plain; charset=utf-8", body);
+    }
+
+    fn serve_once_text(port: int, body: string): int {
+        let server_fd: int = self.open_default(port);
+        if (server_fd < 0) {
+            return server_fd;
+        }
+
+        let client_fd: int = self.accept(server_fd);
+        if (client_fd < 0) {
+            self.close_server(server_fd);
+            return client_fd;
+        }
+
+        self.ok(client_fd, body);
+        self.close_client(client_fd);
+        self.close_server(server_fd);
+        return 0;
+    }
+
+    fn serve_once_html(port: int, body: string): int {
+        let server_fd: int = self.open_default(port);
+        if (server_fd < 0) {
+            return server_fd;
+        }
+
+        let client_fd: int = self.accept(server_fd);
+        if (client_fd < 0) {
+            self.close_server(server_fd);
+            return client_fd;
+        }
+
+        self.html(client_fd, body);
+        self.close_client(client_fd);
+        self.close_server(server_fd);
+        return 0;
+    }
+
+    fn serve_once_json(port: int, body: string): int {
+        let server_fd: int = self.open_default(port);
+        if (server_fd < 0) {
+            return server_fd;
+        }
+
+        let client_fd: int = self.accept(server_fd);
+        if (client_fd < 0) {
+            self.close_server(server_fd);
+            return client_fd;
+        }
+
+        self.json(client_fd, body);
+        self.close_client(client_fd);
+        self.close_server(server_fd);
+        return 0;
+    }
+}

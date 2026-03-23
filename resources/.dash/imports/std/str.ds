@@ -1,0 +1,46 @@
+// ============================================================================
+// Dash Standard Library - String Module
+// Author: htcdevk0
+// License: GNU GPL v3
+//
+// Basic string utilities built over C string functions.
+// Provides comparison, length, prefix/suffix checks, and search operations.
+// ============================================================================
+
+// ===== STRING API =====
+class str: static {
+
+    // ===== COMPARISON =====
+
+    extern cmp(a: string, b: string): int;
+
+    extern eq(a: string, b: string): bool;
+
+    extern ne(a: string, b: string): bool;
+
+    extern lt(a: string, b: string): bool;
+
+    extern gt(a: string, b: string): bool;
+
+    // ===== LENGTH =====
+
+    extern len(s: string): int;
+
+    // ===== PREFIX / SUFFIX =====
+
+    extern starts_with(s: string, prefix: string): bool;
+
+    extern ends_with(s: string, suffix: string): bool;
+
+    // ===== SEARCH =====
+
+    extern contains(s: string, sub: string): bool;
+
+    extern find(s: string, sub: string): int;
+
+    extern find_char(s: string, c: int): int;
+
+    // ===== EMPTY =====
+
+    extern is_empty(s: string): bool;
+}

@@ -1,0 +1,40 @@
+// ============================================================================
+// Dash Standard Library - File System Module
+// Author: htcdevk0
+// License: GNU GPL v3
+//
+// Minimal file I/O abstraction over C stdio.
+// Provides basic file operations: open, read, write, seek, and utilities.
+// ============================================================================
+
+extern: int SEEK_SET;
+extern: int SEEK_CUR;
+extern: int SEEK_END;
+class fs: static {
+
+    // ===== FILE OPEN / CLOSE =====
+
+    extern open(path: string, mode: string): uint;
+
+    extern close(file: uint): void;
+
+    // ===== POSITION =====
+
+    extern seek(file: uint, offset: int, origin: int): void;
+
+    extern tell(file: uint): int;
+
+    // ===== READ =====
+
+    extern read(file: uint, size: uint): uint;
+
+    // ===== WRITE =====
+
+    extern write(file: uint, data: string): void;
+
+    // ===== UTIL =====
+
+    extern exists(path: string): bool;
+
+    extern size(path: string): int;
+}

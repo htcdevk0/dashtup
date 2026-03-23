@@ -1,0 +1,15 @@
+#ifndef DASHTUP_CONFIG_H
+#define DASHTUP_CONFIG_H
+
+#define DASHTUP_VERSION "1.2.0"
+#define DASH_PACKAGE_VERSION "4.1.1LL"
+#define DASH_DOC_VERSION "v1.1.0"
+
+#define DASHTUP_ENV_PREFIX "DASHTUP_PREFIX"
+#define DASHTUP_ENV_HOME "DASHTUP_HOME"
+#define DASHTUP_ENV_ASSUME_YES "DASHTUP_ASSUME_YES"
+
+#define DASHTUP_STATE_FILE ".dashtup-state"
+#define DASHTUP_BACKUP_NAME "dash.dashtup.backup"
+
+#endif

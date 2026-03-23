@@ -1,0 +1,29 @@
+// ============================================================================
+// Dash Standard Library - OS Module
+// Author: htcdevk0
+// License: GNU GPL v3
+//
+// Minimal OS interaction layer.
+// Provides command execution, process termination, and target detection.
+// ============================================================================
+
+class system: static {
+    extern execute(command: string): int;
+
+    extern quit(code: int): void;
+
+    fn clear(): void {
+        if (os.eq("mac") || os.eq("linux")) {
+            self.execute("clear");
+        }
+        if (os.eq("windows")) {
+            self.execute("cls");
+        }
+    }
+}
+
+class os: static {
+    extern auto(): bool;
+
+    extern eq(_os: string): int;
+}
