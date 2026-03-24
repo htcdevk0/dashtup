@@ -1,7 +1,7 @@
 #ifndef DASHTUP_CONFIG_H
 #define DASHTUP_CONFIG_H
 
-#define DASHTUP_VERSION "1.4.0"
+#define DASHTUP_VERSION "1.4.1"
 #define DASH_PACKAGE_VERSION "5.0.0LL"
 #define DASH_DOC_VERSION "v3.1.0"
 
