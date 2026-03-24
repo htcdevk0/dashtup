@@ -4,9 +4,9 @@ Official syntax and other documentation for the ***Dash Programming Language™*
 
 Made by: htcdevk0
 
-Doc Version: v1.1.0
+Doc Version: v3.0.0
 Dash Version: v4.1.1LL
-Dash Repository Version: v2.0.0
+Dash Repository Version: v2.0.4
 
 ---
 
@@ -357,6 +357,242 @@ fn main(): int {
 
 ---
 
+## Loops:
+
+Loops in ***Dash Programming Language™*** are used to repeat code based on conditions or ranges.
+
+Dash supports:
+
+- for loops (range-based iteration)
+- while loops (condition-based)
+- do-while loops (runs at least once)
+
+**Example:**
+
+*For loop*
+```dash
+import [std/io];
+
+fn func(): void {
+    const arr: string[5] = {"ABC", "DEF", "GHI", "JKL", "MNO"};
+    for (let i: int = 0; i < 5; i++) {
+        io.println($"Array content: {arr[i]}");
+    }
+}
+
+fn main(): int {
+    func();
+    return 0;
+}
+```
+
+*While loop*
+```dash
+import [std/io];
+
+fn main(): int {
+    let n: int = 0;
+    while (n <= 50) {
+        n++;
+        io.println(n);
+    }
+    return 0;
+}
+```
+
+*Do While loop*
+```dash
+import [std/io];
+
+fn main(): int {
+    let choice: int = 1000;
+    do {
+        io.println("Enter your choice (0 quit, 1.. stay): ");
+        io.sinp(&choice);
+    } while (choice != 0);
+    return 0;
+}
+```
+
+---
+
+### Match
+
+```dash
+import [std/io];
+
+fn main(): int {
+    let number: int = 1000;
+
+    match (number) {
+        0..10 -> io.println("Between 0 and 10")
+        1000 -> io.println("Exactly 1000")
+        _ -> io.println("Other value")
+    }
+
+    return 0;
+}
+```
+
+---
+
+### Switch
+
+```dash
+import [std/io];
+
+fn main(): int {
+    let number: int = 1000;
+
+    switch (number) {
+        case 1:
+            io.println("One");
+            break;
+        case 2:
+            io.println("Two");
+            break;
+        default:
+            io.println("Other");
+            break;
+    }
+
+    return 0;
+}
+```
+
+---
+
+## Conditionals
+
+Conditionals in Dash are used to control program flow based on conditions.
+
+### Example
+
+```dash
+import [std/io];
+
+fn main(): int {
+    let value: int = 10;
+
+    if (value > 10) {
+        io.println("Greater than 10");
+    } else if (value == 10) {
+        io.println("Equal to 10");
+    } else {
+        io.println("Less than 10");
+    }
+
+    return 0;
+}
+```
+*Body:*
+```dash
+if (condition) {
+    // code
+} else if (condition) {
+    // code
+} else {
+    // code
+}
+```
+
+---
+
+### `use`:
+
+The `use` keyword allows you to access functions, classes, variables,
+and other symbols from a module **without importing the entire
+module**.\
+This mechanism is designed to prevent **cyclic imports** and reduce
+unnecessary module dependencies during compilation.
+
+Instead of loading the full module into scope, `use` selectively exposes
+only the requested symbols.
+
+**Example:**
+
+``` dash
+use [std/io] {io}; // accesses only the 'io' class from std/io
+
+fn main(): int {
+    io.println("Hello, World");
+    return 0;
+}
+```
+
+**Forms:**
+
+``` dash
+use [module] {symbol1, symbol2}; // selective symbols
+use [module] {*};               // all symbols (full exposure)
+use "./local" {symbol};        // local module access
+```
+
+**Behavior:** - Does not perform a full module import - Avoids cyclic
+dependency issues - Reduces compile-time overhead - Provides
+fine-grained control over symbol visibility
+
+------------------------------------------------------------------------
+
+### Annotations:
+
+Annotations are an advanced feature that provide **additional metadata
+and compile-time control** over functions (and potentially other
+constructs).\
+They do not directly affect runtime behavior but influence compiler
+diagnostics and symbol organization.
+
+Currently supported annotations:
+
+``` dash
+@Namespace("namespace_here")
+<function>
+    - Assigns the function to a namespace.
+    - The function must be accessed using: namespace::function();
+
+@Deprecated
+<function>
+    - Emits a compile-time warning when the function is used.
+    - Indicates that the function is outdated and may be removed in future versions.
+
+@Risky
+<function>
+    - Emits a compile-time warning indicating that the function may be unsafe,
+      unstable, or prone to errors.
+
+@Warning("warning here")
+<function>
+    - Emits a custom compile-time warning message when the function is used.
+```
+
+**Example:**
+
+``` dash
+@Namespace("math")
+fn add(a: int, b: int): int {
+    return a + b;
+}
+
+@Deprecated
+fn oldFunc(): void {}
+
+@Risky
+fn unstable(): void {}
+
+@Warning("This function is experimental")
+fn experimental(): void {}
+
+fn main(): int {
+    math::add(2, 3);
+    oldFunc();
+    unstable();
+    experimental();
+    return 0;
+}
+```
+
+---
+
 ## CLI:
 
 **Usage:**
@@ -391,7 +627,8 @@ fn main(): int {
 
 **Repositories:**
 - [https://github.com/htcdevk0/dash](https://github.com/htcdevk0/dash)
-- [https://github.com/htcdevk0/Dash-Language-STDLIB](https://github.com/htcdevk0/Dash-Language-STDLIB)
+- [https://github.com/htcdevk0/Dash-Language-STDLIB](https://github.com/htcdevk0/dash-stdlib)
+- [https://github.com/htcdevk0/dashtup](https://github.com/htcdevk0/dashtup)
 
 ---
 
