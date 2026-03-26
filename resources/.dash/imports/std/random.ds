@@ -1,0 +1,110 @@
+/*
+    random.ds
+    Made by: htcdevk0
+*/
+
+extern("c") rand(): int;
+extern("c") srand(seed: uint): void;
+
+extern("c") open(path: string, flags: int): int;
+extern("c") read(fd: int, buf: uint*, count: uint): int;
+extern("c") close(fd: int): int;
+
+const O_RDONLY: int = 0;
+
+class Random {
+    let seeded: bool;
+    let lastSeed: uint;
+
+    fn init(seed: uint): void {
+        self.seeded = false;
+        self.lastSeed = 0;
+        self.seed(seed);
+    }
+
+    fn seed(seed: uint): void {
+        self.lastSeed = seed;
+        self.seeded = true;
+        srand(seed);
+    }
+
+    fn aseed(): uint {
+        let fd: int = open("/dev/urandom", O_RDONLY);
+
+        if (fd < 0) {
+            let fallback: uint = 1;
+            self.seed(fallback);
+            return fallback;
+        }
+
+        let seed: uint = 0;
+
+        let readBytes: int = read(fd, &seed, 8);
+        close(fd);
+
+        if (readBytes != 8) {
+            let fallback: uint = 1;
+            self.seed(fallback);
+            return fallback;
+        }
+
+        self.seed(seed);
+        return seed;
+    }
+
+    fn reseed(seed: uint): void {
+        self.seed(seed);
+    }
+
+    fn next(): int {
+        if (self.seeded == false) {
+            self.aseed();
+        }
+
+        return rand();
+    }
+
+    fn raw(): int {
+        return rand();
+    }
+
+    fn nextMax(max: int): int {
+        if (max <= 0) {
+            return 0;
+        }
+
+        return (self.next() % max);
+    }
+
+    fn nextRange(min: int, max: int): int {
+        if (max < min) {
+            return min;
+        }
+
+        return (min + (self.next() % ((max - min) + 1)));
+    }
+
+    fn chance(percent: int): bool {
+        if (percent <= 0) {
+            return false;
+        }
+
+        if (percent >= 100) {
+            return true;
+        }
+
+        return (self.nextRange(1, 100) <= percent);
+    }
+
+    fn coinFlip(): bool {
+        return (self.nextRange(0, 1) == 1);
+    }
+
+    fn getSeed(): uint {
+        return self.lastSeed;
+    }
+
+    fn isSeeded(): bool {
+        return self.seeded;
+    }
+}
